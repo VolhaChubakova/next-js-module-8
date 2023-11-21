@@ -1,95 +1,59 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+import SearchForm from "./components/searchForm/searchForm";
+import MovieTile from "./components/movieTile/movieTile";
+import SortControl from "./components/sortControl/sortControl";
+import getData from "./api/getData";
+import './globals.css';
+import './page.css';
 
-export default function Home() {
+export default async function Home() {
+  const mainGenres = ['ALL', 'DOCUMENTARY', 'COMEDY', 'HORROR', 'CRIME'];
+  const options = ['RELEASE DATE', 'TITLE'];  
+  const defaultOption = options[0];
+  const sortCriterion = defaultOption;
+  const movies = await getData();
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+        <main >
+            <div className='MovieListPage-header'>
+                <div className='MovieListPage-addMovieSection'>
+                    <span className='MovieListPage-logo'>netflixroulette</span>
+                    <button className='MovieListPage-addMoviebutton'>+ ADD MOVIE</button>
+                </div>
+                <SearchForm/>
+            </div>
+            <div className='MovieListPage-wrapper'>
+                <div className='MovieListPage-menu'>
+                    <div>
+                        <ul className='MovieListPage-activeGenres' data-testid='movieListPage-genresTab'>
+                            {mainGenres.map((item) =>
+                                <li key={item} className={(item=== 'ALL'? ('MovieListPage-activeGenresItem'):'')}>
+                                    {item}
+                                </li>
+                            )}
+                        </ul>
+                    </div>
+                    <SortControl options={options} key={sortCriterion}/>
+                </div>
+                <p><span className='MovieListPage-totalAmount'>{movies.data.length}</span> movies found</p>
+                <div className='MovieListPage-generalInfo'>
+                    <div className='MovieListPage-movieItems'>
+                        {movies? (
+                            movies.data.map((item)=> {
+                                return  (
+                                    <MovieTile key={item.id} movieInfo={{
+                                        imageUrl:item.poster_path,
+                                        name: item.title,
+                                        releaseYear:item.release_date.slice(0,4),
+                                        genres:item.genres,
+                                        id:item.id}}
+                                    />
+                                )
+                            })
+                        ):(<></>)}
+                    </div>
+                </div>
+            </div>
+            <div className='MovieListPage-footer'>netflixroulette</div>
+        </main>
   )
 }

@@ -1,0 +1,41 @@
+.sortControl-containter {
+    display: flex;
+    justify-content: space-between;
+    max-width: 325px;
+    background-color: #232323 ;
+    color:#FFFFFF;
+    max-height: 50px;
+    padding: 16px;
+    margin:0px 16px;
+
+}
+
+.sortControl-options {
+    font-family: 'Montserrat';
+    height: 50px;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    background-color: #232323;
+    border: 0px solid transparent;
+}
+
+.sortControl-options:checked {
+    border: 0px solid transparent;
+}
+
+.sortControl-releaseDate {
+    font-size: 14px;
+}
+
+.sortControl-item {
+    padding: 8px;
+}
+
+.sortControl-descripion {
+    line-height: 50px;
+    font-weight: 400;
+    opacity: 60%;
+    margin-right: 20px;
+}
